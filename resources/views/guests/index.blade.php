@@ -17,7 +17,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('guests.store', $invitation->id) }}" method="POST" class="mb-6 flex gap-3">
+            <form action="{{ route('client.guests.store', $invitation->id) }}" method="POST" class="mb-6 flex gap-3">
                 @csrf
                 <div class="flex-1">
                     <label for="name" class="sr-only">Nama Tamu</label>
@@ -63,7 +63,7 @@
                                     </div>
                                 </td>
                                 <td class="px-4 py-3 text-right text-sm">
-                                    <form action="{{ route('guests.destroy', $guest->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin ingin menghapus tamu ini?');">
+                                    <form action="{{ route('client.guests.destroy', $guest->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin ingin menghapus tamu ini?');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">Hapus</button>

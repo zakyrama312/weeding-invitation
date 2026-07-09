@@ -95,31 +95,33 @@
             pointer-events: none;
             z-index: 10;
         }
-        .corner-tl { top: 0; left: 0; }
-        .corner-br { bottom: 0; right: 0; transform: rotate(180deg); }
-        .corner-tr { top: 0; right: 0; transform: rotate(90deg); }
-        .corner-bl { bottom: 0; left: 0; transform: rotate(-90deg); }
+        .corner-tl { top: 0; left: 0; animation: breathe-tl 6s ease-in-out infinite alternate; }
+        .corner-br { bottom: 0; right: 0; animation: breathe-br 6s ease-in-out infinite alternate; }
+        .corner-tr { top: 0; right: 0; animation: breathe-tr 6s ease-in-out infinite alternate; }
+        .corner-bl { bottom: 0; left: 0; animation: breathe-bl 6s ease-in-out infinite alternate; }
+
+        @keyframes breathe-tl { 0% { transform: rotate(0deg) scale(1); } 100% { transform: rotate(0deg) scale(1.05); } }
+        @keyframes breathe-tr { 0% { transform: rotate(90deg) scale(1); } 100% { transform: rotate(90deg) scale(1.05); } }
+        @keyframes breathe-br { 0% { transform: rotate(180deg) scale(1); } 100% { transform: rotate(180deg) scale(1.05); } }
+        @keyframes breathe-bl { 0% { transform: rotate(-90deg) scale(1); } 100% { transform: rotate(-90deg) scale(1.05); } }
 
         /* Dynamic Floral/Corner Ornaments */
         .svg-floral {
             @if($hasCorner)
                 background-image: url("{{ asset($cornerPath) }}");
                 background-size: contain;
-                /* mix-blend-mode: multiply; */ /* Hapus comment ini jika background fotomu putih/tidak transparan */
+                /* mix-blend-mode: multiply; */
             @else
                 background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpath fill='{{ urlencode($cfg['ornament_color']) }}' d='M0,0 C50,0 100,20 120,60 C140,100 130,150 100,180 C110,130 90,80 40,50 C20,30 0,20 0,0 Z' opacity='0.2'/%3E%3Cpath fill='{{ urlencode($cfg['ornament_color']) }}' d='M20,0 C60,10 90,40 100,80 C80,50 40,30 0,30 Z' opacity='0.4'/%3E%3C/svg%3E");
                 background-size: cover;
             @endif
             background-repeat: no-repeat;
             background-position: center;
-            animation: breathe 6s ease-in-out infinite alternate;
         }
 
-        /* Breathing Animation for Florals */
-        @keyframes breathe {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.05); }
-        }
+        /* Hide scrollbar for carousel */
+        .hide-scrollbars::-webkit-scrollbar { display: none; }
+        .hide-scrollbars { -ms-overflow-style: none; scrollbar-width: none; }
 
         /* Paper Texture Overlay */
         .paper-texture {
@@ -240,8 +242,12 @@
         </section>
 
         <!-- MEMPELAI SECTION -->
-        <section id="mempelai" class="py-20 px-6 relative z-10">
-            <div class="max-w-2xl mx-auto text-center">
+        <section id="mempelai" class="py-20 px-6 relative z-10 overflow-hidden">
+            <div class="ornament-corner corner-tl svg-floral opacity-80"></div>
+            <div class="ornament-corner corner-tr svg-floral opacity-80"></div>
+            <div class="ornament-corner corner-bl svg-floral opacity-80"></div>
+            <div class="ornament-corner corner-br svg-floral opacity-80"></div>
+            <div class="max-w-2xl mx-auto text-center relative z-20">
                 <div data-aos="fade-down"><div class="divider-floral"></div></div>
                 <h2 class="text-3xl font-serif font-bold mb-12" data-aos="fade-up">Mempelai</h2>
                 
@@ -282,8 +288,12 @@
         </section>
 
         <!-- ACARA SECTION -->
-        <section id="acara" class="py-20 px-6">
-            <div class="max-w-4xl mx-auto">
+        <section id="acara" class="py-20 px-6 relative z-10 overflow-hidden">
+            <div class="ornament-corner corner-tl svg-floral opacity-80"></div>
+            <div class="ornament-corner corner-tr svg-floral opacity-80"></div>
+            <div class="ornament-corner corner-bl svg-floral opacity-80"></div>
+            <div class="ornament-corner corner-br svg-floral opacity-80"></div>
+            <div class="max-w-4xl mx-auto relative z-20">
                 <div class="text-center mb-12" data-aos="fade-up">
                     <h2 class="text-3xl font-serif font-bold">Rangkaian Acara</h2>
                     <p class="text-sm mt-2 opacity-70">Merupakan suatu kehormatan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir pada acara kami.</p>
@@ -339,24 +349,42 @@
 
         <!-- GALLERY SECTION -->
         @if($invitation->galleries && $invitation->galleries->count() > 0)
-        <section id="galeri" class="py-20 px-6">
-            <div class="max-w-4xl mx-auto text-center">
-                <h2 class="text-3xl font-serif font-bold mb-10" data-aos="fade-up">Galeri Memori</h2>
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <section id="galeri" class="py-20 relative z-10 overflow-hidden">
+            <div class="ornament-corner corner-tl svg-floral opacity-80"></div>
+            <div class="ornament-corner corner-tr svg-floral opacity-80"></div>
+            <div class="ornament-corner corner-bl svg-floral opacity-80"></div>
+            <div class="ornament-corner corner-br svg-floral opacity-80"></div>
+            <div class="w-full max-w-5xl mx-auto text-center relative z-20">
+                <h2 class="text-3xl font-serif font-bold mb-10 px-6" data-aos="fade-up">Galeri Memori</h2>
+                
+                <!-- Swipeable Aesthetic Carousel -->
+                <div class="flex overflow-x-auto snap-x snap-mandatory gap-6 px-10 pb-12 hide-scrollbars items-center">
                     @foreach($invitation->galleries as $index => $photo)
-                    <div data-aos="zoom-in" data-aos-delay="{{ $index * 100 }}" class="aspect-square rounded-2xl overflow-hidden shadow-md">
-                        <img src="{{ Storage::url($photo->file_path) }}" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500">
+                    <div data-aos="zoom-in" data-aos-delay="{{ $index * 100 }}" class="snap-center shrink-0 w-4/5 md:w-1/2 aspect-[3/4] rounded-[2rem] overflow-hidden shadow-2xl relative border-[6px] border-white/50">
+                        <img src="{{ Storage::url($photo->file_path) }}" class="w-full h-full object-cover">
                     </div>
                     @endforeach
+                </div>
+                
+                <!-- Swipe Indicator -->
+                <div class="flex justify-center items-center gap-2 opacity-50 animate-pulse mt-[-20px]">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    <span class="text-xs font-semibold tracking-widest uppercase">Geser</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                 </div>
             </div>
         </section>
         @endif
 
         <!-- RSVP & GUESTBOOK SECTION -->
-        <section id="rsvp" class="py-20 px-6 relative">
-            <div class="max-w-2xl mx-auto">
-                <div class="{{ $cfg['card_bg'] }} rounded-[2rem] p-8 relative z-10" data-aos="fade-up">
+        <section id="rsvp" class="py-20 px-6 relative z-10 overflow-hidden">
+            <div class="ornament-corner corner-tl svg-floral opacity-80"></div>
+            <div class="ornament-corner corner-tr svg-floral opacity-80"></div>
+            <div class="ornament-corner corner-bl svg-floral opacity-80"></div>
+            <div class="ornament-corner corner-br svg-floral opacity-80"></div>
+            
+            <div class="max-w-2xl mx-auto relative z-20">
+                <div class="{{ $cfg['card_bg'] }} rounded-[2rem] p-8 relative" data-aos="fade-up">
                     <h2 class="text-3xl font-serif font-bold mb-2 text-center">Kehadiran & Doa Restu</h2>
                     <div class="divider-floral"></div>
                     
